@@ -81,7 +81,7 @@ function initializeGame()
         clear();
       }
   };
-});
+})();
   
   game.framestart = Date.now();
   game.frameend = Date.now();
