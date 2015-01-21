@@ -1,7 +1,8 @@
 var game = {};
-var assetQueue = [
-  "noir.png"
-];
+var expectedWidth = 1280;
+var expectedHeight = 720;
+var KEYSTATE_UP = 0;
+var KEYSTATE_DOWN = 1;
 
 document.addEventListener("DOMContentLoaded", function(event) {
   //Create a friendly game loop
@@ -35,16 +36,24 @@ function resizeCanvas() {
   game.window.height = window.innerHeight;
   game.width = game.context.canvas.clientWidth;
   game.height = game.context.canvas.clientHeight;
+  game.scale = Math.min(expectedWidth/game.width, expectedHeight/game.height);
 }
 
 function initializeGame()
 {
   game.window = document.getElementById("game_window");
+
+  game.window.addEventListener("onkeydown", keyDown);
+  game.window.addEventListener("onkeyup", keyUp);
+
   game.context = game.window.getContext("2d");
   resizeCanvas();
-  game.width = game.context.canvas.clientWidth;
-  game.height = game.context.canvas.clientHeight;
+  
   game.assetCount = 0;
+  game.fps = 60;
+  game.clearColor = "rgb(0,0,0)";
+  game.inputEvents = [];
+  game.keyStates = Array(255); //ASCII keystates?
   clear();
   
   game.context.drawRotated = DrawRotated.bind(game.context);
@@ -57,7 +66,7 @@ function initializeGame()
     return Date.now() - this.framestart;
   }).bind(game);
   game.update = (function() {
-    var loops = 0, skipTicks = 1000 / Game.fps,
+    var loops = 0, skipTicks = 1000 / game.fps,
       maxFrameSkip = 10,
       nextGameTick = (new Date).getTime();
   
@@ -83,11 +92,6 @@ function initializeGame()
   };
 });
   
-  game.framestart = Date.now();
-  game.frameend = Date.now();
-  game.starttime = Date.now();
-  game.frametimeweight = 0.4;
-  game.frametimeaverage = 0;
   game.stack = [];
   //Will load all assets
   game.stack.push(startLoader());
@@ -96,7 +100,7 @@ function initializeGame()
 
 function clear()
 {
-  game.context.fillStyle = "rgb(0,0,0)";
+  game.context.fillStyle = game.clearColor;
   game.context.fillRect(0, 0, game.width, game.height);
 }
 
@@ -114,15 +118,6 @@ function startLoader()
       popState();
       startGame();
     }
-    else
-    {
-      var imageObj = new Image();
-      imageObj.onload = function() {
-        game.assetCount += 1;
-      };
-      imageObj.src = "img/" + name + ".png";
-      assets[name] = imageObj;
-    }
   }).bind(state);
 
   state.draw = (function()
@@ -134,10 +129,25 @@ function startLoader()
     game.context.fillStyle = "rgb(0, 196, 0)";
     game.context.fillRect((game.width/2)-(width/2), (game.height/2)-(height/2), width * (this.progress/game.assetCount),height);
   }).bind(state);
-
+  //start load process
+  loadAsset(assetQueue.shift());
 };
 
+function loadAsset(name)
+{
+  var imageObj = new Image();
+  imageObj.onload = function() {
+    if (assetQueue.length > 0)
+    {
+      loadAsset(assetQueue.shift());
+    }
+  };
+  imageObj.src = "img/" + name + ".png";
+  assets[name] = imageObj;
+}
+
 function DrawRotated(image, x, y, angle) {
+  // TODO: SCALE COORDINATES SOMEHOW
   this.save();
   this.translate(x+game.width/2, y+game.height/2);
   this.rotate(angle);
@@ -153,6 +163,9 @@ function newObject()
           draw : function(this){
             game.context.fillStyle = "rgb(255, 255, 255)";
             game.context.fillRect(this.x, this.y, 16, 16);
+          },
+          update : function(this){
+            game
           }
         };
 };
@@ -169,6 +182,23 @@ function popState()
   game.stack.pop();
 };
 
+function zSort(a, b)
+{
+  return (a.z - b.z);
+};
 
+function keyUp(e)
+{
+  // Update state
+  var keyCode = ('which' in event) ? event.which : event.keyCode;
+  game.keyStates(keyCode) = KEYSTATE_UP;
+  // Enque input
+  game.inputEvents.push({state: KEYSTATE_UP, key: keyCode});
+};
 
-
+function keyDown(e)
+{
+  var keyCode = ('which' in event) ? event.which : event.keyCode;
+  game.keyStates(keyCode) = KEYSTATE_DOWN;
+  game.inputEvents.push({state: KEYSTATE_DOWN, key: keyCode});
+};
