@@ -45,9 +45,45 @@ function startMenu()
 
 	var state = {
 		savedGame : null,
-		update : function()
+		update : function(this)
 		{
-			
+		  // Read input
+		  while(game.inputEvents.length > 0)
+		  {
+		  	var e = game.inputEvents.shift();
+		  	if ((e.state == KEY_DOWN) && (game.keyStates(e.keyCode) != KEY_DOWN))
+		  	{
+		  		switch(e.keyCode)
+		  		{
+		  			case KeyCodes.LEFT:
+		  			case KeyCodes.A:
+		  			    if((selected == 1) && (this.savedGame != null))
+		  			    {
+		  			    	this.selected = 0;
+		  			    }
+		  			    else
+		  			    {
+		  			    	this.selected = 1;
+		  			    }
+		  			  break;
+
+		  			case KeyCodes.RIGHT:
+		  			case KeyCodes.W:
+		  				if ((selected == 0) && (this.savedGame != null))
+		  				{
+		  					pushState(this.savedGame);
+		  				}
+		  				else
+		  				{
+		  					pushState(startNewGame());
+		  				}
+		  			  break;
+
+		  			default:
+		  			  break;
+		  		}
+		  	}
+		  }	
 		},
 		draw : function()
 		{
@@ -55,11 +91,21 @@ function startMenu()
 			titleSprite.draw();
 			newGameSprite.draw();
 			continueSprite.draw();
+			if (selected == 0)
+			{
+				cursorSprite.y = continueSprite.y;
+			}
+			else
+			{
+				cursorSprite.y = newGameSprite.y;
+			}
+			cursorSprite.draw();
 		},
 		selected : 0,
 		titleSprite : titleSprite,
 		continueSprite : continueSprite,
-		newGameSprite : newGameSprite
+		newGameSprite : newGameSprite,
+		cursorSprite : cursorSprite
 	};
 	if(typeof(Storage) !== "undefined") {
     	var savedGame = localStorage.getItem(saveKey);
@@ -74,6 +120,7 @@ function startMenu()
     	else
     	{
     		state.savedGame = savedGame;
+    		state.selected = 1;
     	}
 	} else {
     	alert("Save games not supported by your browser");
