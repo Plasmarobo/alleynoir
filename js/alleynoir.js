@@ -1,5 +1,7 @@
 var clearColor = "rgb(222, 13, 170)";
 var buildingColor = "rgb(5, 7, 105)";
+var streetColor = "rgb(51, 48, 69)";
+var lineColor = "rgb(82, 79, 49)";
 var effectColor = "rgb(249,0,0)";
 var spriteColor = "rgb(0, 0, 0)";
 var saveKey = "alleyNoirSave";
@@ -12,21 +14,22 @@ function startDialog(background, dialog)
 	return state;
 };
 
+
+
 function newStaticObject(asset)
 {
-	var so = {
-		img : assets[asset],
-		x : 0,
-		y : 0,
-		z : 0,
-		update : function() {
+	var so = {};
+	so.img = game.assets[asset];
+	so.x = 0;
+	so.y = 0;
+	so.z = 0;
+	so.update = (function() {
 			// Do nothing
-		},
-		draw : function(this)
+		}).bind(so);
+	so.draw = (function()
 		{
-			game.context.drawImage(this.img, x, y);
-		}
-	};
+			game.context.drawImage(this.img, this.x, this.y);
+		}).bind(so);
 	return so;
 };
 
@@ -45,19 +48,26 @@ function startMenu()
 
 	var state = {
 		savedGame : null,
-		update : function(this)
+		selected : 0,
+		titleSprite : titleSprite,
+		continueSprite : continueSprite,
+		newGameSprite : newGameSprite,
+		cursorSprite : cursorSprite,
+	};
+	state.update = (function()
 		{
+		  // console.log("Input events " + game.inputEvents.length);
 		  // Read input
 		  while(game.inputEvents.length > 0)
 		  {
 		  	var e = game.inputEvents.shift();
-		  	if ((e.state == KEY_DOWN) && (game.keyStates(e.keyCode) != KEY_DOWN))
+		  	if ((e.state == KEYSTATE_UP) && (game.keyStates[e.keyCode] != KEYSTATE_DOWN))
 		  	{
 		  		switch(e.keyCode)
 		  		{
 		  			case KeyCodes.LEFT:
 		  			case KeyCodes.A:
-		  			    if((selected == 1) && (this.savedGame != null))
+		  			    if((this.selected == 1) && (this.savedGame != null))
 		  			    {
 		  			    	this.selected = 0;
 		  			    }
@@ -69,7 +79,7 @@ function startMenu()
 
 		  			case KeyCodes.RIGHT:
 		  			case KeyCodes.W:
-		  				if ((selected == 0) && (this.savedGame != null))
+		  				if ((this.selected == 0) && (this.savedGame != null))
 		  				{
 		  					pushState(this.savedGame);
 		  				}
@@ -84,29 +94,24 @@ function startMenu()
 		  		}
 		  	}
 		  }	
-		},
-		draw : function()
+		}).bind(state);
+	state.draw = (function()
 		{
 			clear();
-			titleSprite.draw();
-			newGameSprite.draw();
-			continueSprite.draw();
-			if (selected == 0)
+			this.titleSprite.draw();
+			this.newGameSprite.draw();
+			this.continueSprite.draw();
+			if (this.selected == 0)
 			{
-				cursorSprite.y = continueSprite.y;
+				this.cursorSprite.y = this.continueSprite.y;
 			}
 			else
 			{
-				cursorSprite.y = newGameSprite.y;
+				this.cursorSprite.y = this.newGameSprite.y;
 			}
-			cursorSprite.draw();
-		},
-		selected : 0,
-		titleSprite : titleSprite,
-		continueSprite : continueSprite,
-		newGameSprite : newGameSprite,
-		cursorSprite : cursorSprite
-	};
+			this.cursorSprite.draw();
+		}).bind(state);
+		
 	if(typeof(Storage) !== "undefined") {
     	var savedGame = localStorage.getItem(saveKey);
     	if (savedGame == null)
@@ -116,11 +121,12 @@ function startMenu()
     		{
     			localStorage.setItem(saveKey, {});
     		}
+    		state.selected = 1;
     	}
     	else
     	{
     		state.savedGame = savedGame;
-    		state.selected = 1;
+    		state.selected = 0;
     	}
 	} else {
     	alert("Save games not supported by your browser");
@@ -130,10 +136,79 @@ function startMenu()
 };
 
 
+function startNewGame()
+{
+	var state = {};
+	state.buildings = [];
+	state.npcs = [];
+	state.alleys = [];
+
+	state.offset = 0;
+
+	state.update = (function()
+	{
+
+	}).bind(state);
+
+	state.draw = (function()
+	{
+		var width = 1280;
+		var lineWidth = 128;
+		var lineHeight = 8;
+		game.context.fillStyle = buildingColor;
+		for(var building in this.buildings)
+		{
+			game.context.fillRect(building.x + this.offset, building.y-building.h, building.w, building.h);
+		}
+		game.context.fillStyle = streetColor;
+		game.context.fillRect(0, 500, width, 100);
+		game.context.fillStyle = lineColor;
+		for(var i = 0; i < width+lineWidth; i += lineWidth*2)
+		{
+			game.context.fillRect(i-this.offset, 546, lineWidth, 8);
+		}
+	}).bind(state);
+	return state;
+};
+
 function generateCity()
 {
+  var minAlleyCount = 6;
+  var alleyWidth = 128;
+  var cityWidth = 25600;
+  var alleyCount = 0;
+  var city = [];
+  while(alleyCount < 6)
+  {
+  	alleyCount = generateChunk(city, 0, cityWidth, true, 0);
+  }
+  return city;
+};
 
-}
+function generateChunk(city, length, target, alleyBlock, alleyCount)
+{
+  var ab = false;
+  if (length >= target)
+  {
+  	if((Math.random() > 0.7) && (alleyBlock != true))
+  	{
+  	  city.push({alley: true, w: alleyWidth, h: 0, x: length, y: 500});
+  	  length += alleyWidth;
+  	  alleyCount += 1;
+      ab = true;
+  	}
+  	else
+  	{
+      var l = (256 * (Math.ceil(8 * Math.random())));
+  	  city.push({alley: false, w: l, h: (396 * Math.ceil(8 * Math.random())), x: length, y: 500});
+  	  length += l;
+  	  ab = false;
+  	}
+  	return generateChunk(city, length, target, ab, alleyCount);
+  }
+  else
+  	return alleyCount;
+};
 
 function startGame()
 {

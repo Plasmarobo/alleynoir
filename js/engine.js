@@ -3,6 +3,7 @@ var expectedWidth = 1280;
 var expectedHeight = 720;
 var KEYSTATE_UP = 0;
 var KEYSTATE_DOWN = 1;
+var DEBOUNCE_DELAY = 100;
 var KeyCodes =
 {
   BACKSPACE : 8,
@@ -24,11 +25,17 @@ var KeyCodes =
 };
 
 document.addEventListener("DOMContentLoaded", function(event) {
+  initializeGame();
   //Create a friendly game loop
   // http://nokarma.org/2011/02/02/javascript-game-development-the-game-loop/
   (function() {
   var onEachFrame;
-  if (window.webkitRequestAnimationFrame) {
+  if (window.mozRequestAnimationFrame) {
+    onEachFrame = function(cb) {
+      var _cb = function () { cb(); requestAnimationFrame(_cb); }
+      _cb();
+    }
+  } else if (window.webkitRequestAnimationFrame) {
     onEachFrame = function(cb) {
       var _cb = function() { cb(); webkitRequestAnimationFrame(_cb); }
       _cb();
@@ -45,7 +52,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
   window.onEachFrame = onEachFrame;
   })();
-  initializeGame();
+  
+  window.onEachFrame(game.update);
 });
 
 document.addEventListener("resize", resizeCanvas);
@@ -62,19 +70,21 @@ function initializeGame()
 {
   game.window = document.getElementById("game_window");
 
-  game.window.addEventListener("onkeydown", keyDown);
-  game.window.addEventListener("onkeyup", keyUp);
+  document.addEventListener('keydown', keyDown, false);
+  document.addEventListener('keyup', keyUp, false);
 
   game.context = game.window.getContext("2d");
   resizeCanvas();
   
-  game.assetCount = 0;
+  game.assetCount = assetQueue.length;
   game.fps = 60;
   game.clearColor = "rgb(0,0,0)";
   game.inputEvents = [];
   game.keyStates = Array(255); //ASCII keystates?
+  game.assets = {};
+  game.allowSave = false;
   clear();
-  
+  game.stack = [];
   game.context.drawRotated = DrawRotated.bind(game.context);
   game.runtime = (function()
   {
@@ -89,7 +99,7 @@ function initializeGame()
       maxFrameSkip = 10,
       nextGameTick = (new Date).getTime();
   
-    return function {
+    return function() {
       loops = 0;
       if (game.stack.length > 0)
       {
@@ -98,7 +108,6 @@ function initializeGame()
           nextGameTick += skipTicks;
           loops++;
           // purge input queue
-          game.inputEvents = [];
         }
     
         if(loops)
@@ -110,14 +119,10 @@ function initializeGame()
       {
         //clear();
       }
-
-  };
-});
-  
-  game.stack = [];
+    };
+  })();
   //Will load all assets
   game.stack.push(startLoader());
-  window.onEachFrame(game.update);
 };
 
 function clear()
@@ -138,7 +143,7 @@ function startLoader()
     if (assetQueue.length == 0)
     {
       popState();
-      startGame();
+      pushState(startGame());
     }
   }).bind(state);
 
@@ -153,19 +158,23 @@ function startLoader()
   }).bind(state);
   //start load process
   loadAsset(assetQueue.shift());
+  return state;
 };
 
 function loadAsset(name)
 {
   var imageObj = new Image();
+  imageObj.src = "img/" + name + ".png";
   imageObj.onload = function() {
     if (assetQueue.length > 0)
     {
       loadAsset(assetQueue.shift());
     }
   };
-  imageObj.src = "img/" + name + ".png";
-  assets[name] = imageObj;
+  imageObj.onerror = function() {
+    alert("Failed to load " + imageObj.src);
+  };
+  game.assets[name] = imageObj;
 }
 
 function DrawRotated(image, x, y, angle) {
@@ -179,17 +188,18 @@ function DrawRotated(image, x, y, angle) {
 
 function newObject()
 {
-  return {x : 0, 
+  var obj = {x : 0, 
           y : 0, 
-          z: 0, 
-          draw : function(this){
+          z: 0
+        };
+  obj.draw = (function(){
             game.context.fillStyle = "rgb(255, 255, 255)";
             game.context.fillRect(this.x, this.y, 16, 16);
-          },
-          update : function(this){
-            game
-          }
-        };
+          }).bind(obj);
+  obj.update = (function(){
+            
+          }).bind(obj);
+  return obj;
 };
 
 //All states need two functions: update and draw
@@ -209,18 +219,18 @@ function zSort(a, b)
   return (a.z - b.z);
 };
 
-function keyUp(e)
+function keyUp(event)
 {
   // Update state
   var keyCode = ('which' in event) ? event.which : event.keyCode;
-  game.keyStates(keyCode) = KEYSTATE_UP;
+  game.keyStates[keyCode] = KEYSTATE_UP;
   // Enque input
-  game.inputEvents.push({state: KEYSTATE_UP, key: keyCode});
+  game.inputEvents.push({state: KEYSTATE_UP, keyCode: keyCode});
 };
 
-function keyDown(e)
+function keyDown(event)
 {
   var keyCode = ('which' in event) ? event.which : event.keyCode;
-  game.keyStates(keyCode) = KEYSTATE_DOWN;
-  game.inputEvents.push({state: KEYSTATE_DOWN, key: keyCode});
+  game.keyStates[keyCode] = KEYSTATE_DOWN;
+  game.inputEvents.push({state: KEYSTATE_DOWN, keyCode: keyCode});
 };
