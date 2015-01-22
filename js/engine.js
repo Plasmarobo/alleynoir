@@ -1,6 +1,7 @@
 var game = {};
 var expectedWidth = 1280;
 var expectedHeight = 720;
+var pixelScale = 8; // 8 px to one unit at scale 1 
 var KEYSTATE_UP = 0;
 var KEYSTATE_DOWN = 1;
 var DEBOUNCE_DELAY = 100;
@@ -105,14 +106,8 @@ function initializeGame()
     // game.sfx.push(sfx);
     sfx.play();
   }).bind(game);
-  game.runtime = (function()
-  {
-    return Date.now()-this.starttime;
-  }).bind(game);
-  game.delta = (function()
-  {
-    return Date.now() - this.framestart;
-  }).bind(game);
+  game.lastframe = (new Date).getTime();
+  game.delta = 0;
   game.update = (function() {
     var loops = 0, skipTicks = 1000 / game.fps,
       maxFrameSkip = 10,
@@ -123,9 +118,11 @@ function initializeGame()
       if (game.stack.length > 0)
       {
         while ((new Date).getTime() > nextGameTick && loops < maxFrameSkip) {
+          game.delta = (new Date).getTime() - game.lastframe;
           game.stack[game.stack.length-1].update();
           nextGameTick += skipTicks;
           loops++;
+          game.lastframe = (new Date).getTime();
           // purge input queue
         }
     
@@ -269,3 +266,8 @@ function keyDown(event)
   game.keyStates[keyCode] = KEYSTATE_DOWN;
   game.inputEvents.push({state: KEYSTATE_DOWN, keyCode: keyCode});
 };
+
+function projectCoordinates(obj)
+{
+  return {x: obj.x * pixelScale * game.scale, y: obj.y * pixelScale * game.scale};
+}

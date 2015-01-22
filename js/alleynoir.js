@@ -146,18 +146,27 @@ function startNewGame()
 	state.offset = 0;
 	state.noirSprite = newStaticObject("noir");
 	state.noirSprite.x = game.width/2-state.noirSprite.img.width;
-	state.noirSprite.y = 500-state.noirSprite.img.height;
+	state.noirSprite.y = 530-state.noirSprite.img.height;
 	state.city = generateCity();
 	game.playMusic("I Knew a Guy");
 	state.update = (function()
 	{
-
+		var motion = 0;
+		if (game.keyStates[KeyCodes.LEFT] == KEYSTATE_DOWN)
+		{
+			motion += -1;
+		}
+		if (game.keyStates[KeyCodes.RIGHT] == KEYSTATE_DOWN)
+		{
+			motion += 1;
+		}
+		this.offset += Math.floor(motion * 64 * game.delta/1000);
 	}).bind(state);
 
 	state.draw = (function()
 	{
 		clear();
-		var width = 1280;
+		var width = game.width;
 		var lineWidth = 128;
 		var lineHeight = 8;
 		
@@ -176,9 +185,9 @@ function startNewGame()
 		game.context.fillStyle = lineColor;
 		for(var i = 0; i < width+lineWidth; i += lineWidth*2)
 		{
-			game.context.fillRect(i-this.offset, 546, lineWidth, 8);
+			game.context.fillRect(i+this.offset, 546, lineWidth, 8);
 		}
-		noirSprite.draw();
+		this.noirSprite.draw();
 		
 	}).bind(state);
 	return state;
