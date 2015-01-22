@@ -19,7 +19,7 @@ function startDialog(background, dialog)
 function newStaticObject(asset)
 {
 	var so = {};
-	so.img = game.assets[asset];
+	so.img = game.assets.images[asset];
 	so.x = 0;
 	so.y = 0;
 	so.z = 0;

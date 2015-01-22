@@ -81,11 +81,30 @@ function initializeGame()
   game.clearColor = "rgb(0,0,0)";
   game.inputEvents = [];
   game.keyStates = Array(255); //ASCII keystates?
-  game.assets = {};
+  game.assets = {images: {}, audio: {}};
   game.allowSave = false;
   clear();
   game.stack = [];
   game.context.drawRotated = DrawRotated.bind(game.context);
+  game.music = null;
+  game.sfx = [];
+  game.playMusic = (function(name)
+  {
+    if (game.music != null)
+    {
+      game.music.pause();
+    }
+    game.music = game.assets.audio[name];
+    game.music.loop = true;
+    game.music.play();
+  }).bind(game);
+  game.playEffect = (function(name)
+  {
+    var sfx = game.assets.audio[name];
+    sfx.currentTime = 0;
+    // game.sfx.push(sfx);
+    sfx.play();
+  }).bind(game);
   game.runtime = (function()
   {
     return Date.now()-this.starttime;
@@ -161,20 +180,36 @@ function startLoader()
   return state;
 };
 
-function loadAsset(name)
+function loadAsset(description)
 {
-  var imageObj = new Image();
-  imageObj.src = "img/" + name + ".png";
-  imageObj.onload = function() {
+  var onload = function() {
     if (assetQueue.length > 0)
     {
       loadAsset(assetQueue.shift());
     }
   };
-  imageObj.onerror = function() {
-    alert("Failed to load " + imageObj.src);
-  };
-  game.assets[name] = imageObj;
+
+  if (description.type == "image")
+  {
+    var imageObj = new Image();
+    imageObj.src = "img/" + description.name + ".png";
+    imageObj.onload = onload;
+    imageObj.onerror = function() {
+      alert("Failed to load image " + imageObj.src);
+    };
+    game.assets.images[description.name] = imageObj;
+  }
+  else if (description.type == "audio")
+  {
+    var audioObj = new Audio();
+    audioObj.src = "sfx/" + description.name + ".ogg";
+    audioObj.onload = onload;
+    audioObj.onerror = function() {
+      alert("Failed to load audio " + audioObj.src);
+    };
+    game.assets.audio[description.name] = audioObj;
+  }
+  else {alert("Unknown content specified for load, aborting");}
 }
 
 function DrawRotated(image, x, y, angle) {
