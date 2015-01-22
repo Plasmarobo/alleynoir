@@ -139,11 +139,14 @@ function startMenu()
 function startNewGame()
 {
 	var state = {};
-	state.buildings = [];
 	state.npcs = [];
 	state.alleys = [];
 
 	state.offset = 0;
+	state.noirSprite = newStaticObject("noir");
+	state.noirSprite.x = game.width/2-state.noirSprite.img.width;
+	state.noirSprite.y = 500-state.noirSprite.img.height;
+	state.city = generateCity();
 
 	state.update = (function()
 	{
@@ -152,14 +155,21 @@ function startNewGame()
 
 	state.draw = (function()
 	{
+		clear();
 		var width = 1280;
 		var lineWidth = 128;
 		var lineHeight = 8;
-		game.context.fillStyle = buildingColor;
-		for(var building in this.buildings)
+		
+		for(var i = 0; i < this.city.length; ++i)
 		{
-			game.context.fillRect(building.x + this.offset, building.y-building.h, building.w, building.h);
+			var building = this.city[i];
+			if (building.alley == false)
+			{
+				game.context.fillStyle = buildingColor;
+				game.context.fillRect(building.x + this.offset, building.y-building.h, building.w, building.h);
+			}
 		}
+
 		game.context.fillStyle = streetColor;
 		game.context.fillRect(0, 500, width, 100);
 		game.context.fillStyle = lineColor;
@@ -167,6 +177,8 @@ function startNewGame()
 		{
 			game.context.fillRect(i-this.offset, 546, lineWidth, 8);
 		}
+		noirSprite.draw();
+		
 	}).bind(state);
 	return state;
 };
@@ -174,7 +186,6 @@ function startNewGame()
 function generateCity()
 {
   var minAlleyCount = 6;
-  var alleyWidth = 128;
   var cityWidth = 25600;
   var alleyCount = 0;
   var city = [];
@@ -188,7 +199,10 @@ function generateCity()
 function generateChunk(city, length, target, alleyBlock, alleyCount)
 {
   var ab = false;
-  if (length >= target)
+  var alleyWidth = 64;
+  var buildingWidth = 128;
+  var buildingHeight = 64;
+  if (length <= target)
   {
   	if((Math.random() > 0.7) && (alleyBlock != true))
   	{
@@ -199,8 +213,8 @@ function generateChunk(city, length, target, alleyBlock, alleyCount)
   	}
   	else
   	{
-      var l = (256 * (Math.ceil(8 * Math.random())));
-  	  city.push({alley: false, w: l, h: (396 * Math.ceil(8 * Math.random())), x: length, y: 500});
+      var l = (buildingWidth * (Math.ceil(3 * Math.random())));
+  	  city.push({alley: false, w: l, h: (buildingHeight * Math.ceil(8 * Math.random())), x: length, y: 500});
   	  length += l;
   	  ab = false;
   	}
