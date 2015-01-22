@@ -54,6 +54,7 @@ function startMenu()
 		newGameSprite : newGameSprite,
 		cursorSprite : cursorSprite,
 	};
+	game.playMusic("Backed Vibes Clean");
 	state.update = (function()
 		{
 		  // console.log("Input events " + game.inputEvents.length);
@@ -147,7 +148,7 @@ function startNewGame()
 	state.noirSprite.x = game.width/2-state.noirSprite.img.width;
 	state.noirSprite.y = 500-state.noirSprite.img.height;
 	state.city = generateCity();
-
+	game.playMusic("I Knew a Guy");
 	state.update = (function()
 	{
 

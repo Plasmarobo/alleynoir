@@ -203,7 +203,7 @@ function loadAsset(description)
   {
     var audioObj = new Audio();
     audioObj.src = "sfx/" + description.name + ".ogg";
-    audioObj.onload = onload;
+    audioObj.oncanplaythrough = onload;
     audioObj.onerror = function() {
       alert("Failed to load audio " + audioObj.src);
     };

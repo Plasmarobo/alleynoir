@@ -13,9 +13,9 @@ var assetQueue = [];
 });
 
 //Audio assets
-(["menu_theme",
-  "city_theme",
-  "shot_effect"
+(["Backed Vibes Clean",
+  "Despair and Triumph",
+  "I Knew a Guy"
 ]).forEach(function(name){
-	assetQueue.push({type: "audio", nane: name});
+	assetQueue.push({type: "audio", name: name});
 });
