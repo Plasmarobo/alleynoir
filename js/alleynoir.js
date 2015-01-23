@@ -152,13 +152,14 @@ function startNewGame()
 	game.playMusic("I Knew a Guy");
   state.overAlley = (function(){
     var index = 0;
+    var playerx = (game.width/2) - this.offset;
+    var playerhitbox = 64/2; // Centered on playerx
     while(index < this.city.length)
     {
       var building = this.city[index];
-      var distance = Math.abs(this.offset + building.x  - (game.width/2));
-      if (distance < 64)
+      if ((Math.abs(building.x - playerx) < playerhitbox) && (building.alley == true))
       {
-        return building.alley;
+        return true;
       }
       ++index;
     }
