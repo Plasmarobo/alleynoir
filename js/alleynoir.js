@@ -1,5 +1,5 @@
 var clearColor = "rgb(222, 13, 170)";
-var buildingColor = "rgb(5, 7, 105)";
+var buildingColor = "rgb(5, 7, 55)";
 var streetColor = "rgb(51, 48, 69)";
 var lineColor = "rgb(82, 79, 49)";
 var effectColor = "rgb(249,0,0)";
@@ -13,8 +13,6 @@ function startDialog(background, dialog)
 	};
 	return state;
 };
-
-
 
 function newStaticObject(asset)
 {
@@ -53,6 +51,7 @@ function startMenu()
 		continueSprite : continueSprite,
 		newGameSprite : newGameSprite,
 		cursorSprite : cursorSprite,
+    idleTime : 0,
 	};
 	game.playMusic("Backed Vibes Clean");
 	state.update = (function()
@@ -95,6 +94,7 @@ function startMenu()
 		  		}
 		  	}
 		  }	
+
 		}).bind(state);
 	state.draw = (function()
 		{
@@ -146,21 +146,48 @@ function startNewGame()
 	state.offset = 0;
 	state.noirSprite = newStaticObject("noir");
 	state.noirSprite.x = game.width/2-state.noirSprite.img.width;
-	state.noirSprite.y = 530-state.noirSprite.img.height;
+	state.noirSprite.y = 730-state.noirSprite.img.height;
+  state.idleTime = 0;
 	state.city = generateCity();
 	game.playMusic("I Knew a Guy");
+  state.overAlley = (function(){
+    var index = 0;
+    while(index < this.city.length)
+    {
+      var building = this.city[index];
+      var distance = Math.abs(this.offset + building.x  - (game.width/2));
+      if (distance < 64)
+      {
+        return building.alley;
+      }
+      ++index;
+    }
+    return false;
+  }).bind(state);
 	state.update = (function()
 	{
 		var motion = 0;
-		if (game.keyStates[KeyCodes.LEFT] == KEYSTATE_DOWN)
-		{
-			motion += -1;
-		}
 		if (game.keyStates[KeyCodes.RIGHT] == KEYSTATE_DOWN)
 		{
-			motion += 1;
+			motion = -1;
 		}
-		this.offset += Math.floor(motion * 64 * game.delta/1000);
+		if (game.keyStates[KeyCodes.LEFT] == KEYSTATE_DOWN)
+		{
+			motion = 1;
+		}
+		this.offset += motion * Math.floor(128 * game.delta/1000);
+    if (this.overAlley() == true)
+    {
+      this.idleTime += game.delta; 
+      if(this.idleTime > 3000)
+      {
+        alert("Start Dialog");
+      }
+    }
+    else
+    {
+      this.idleTime = 0;
+    }
 	}).bind(state);
 
 	state.draw = (function()
@@ -181,14 +208,28 @@ function startNewGame()
 		}
 
 		game.context.fillStyle = streetColor;
-		game.context.fillRect(0, 500, width, 100);
+		game.context.fillRect(0, 700, width, 100);
 		game.context.fillStyle = lineColor;
-		for(var i = 0; i < width+lineWidth; i += lineWidth*2)
+		for(var i = -lineWidth; i < width+lineWidth; i += lineWidth*2)
 		{
-			game.context.fillRect(i+this.offset, 546, lineWidth, 8);
+			game.context.fillRect(i+(this.offset%(2*lineWidth)), 746, lineWidth, 8);
 		}
 		this.noirSprite.draw();
-		
+
+    var elipsis_y = this.noirSprite.y-16-this.noirSprite.img.height;
+		game.context.fillStyle = effectColor;
+    if (this.idleTime > 200)
+    {
+      game.context.fillRect(this.offset-32, elipsis_y, 16, 16);
+    }
+    if (this.idleTime > 1000)
+    {
+      game.context.fillRect(this.offset, elipsis_y, 16, 16);
+    }
+    if (this.idleTime > 2000)
+    {
+      game.context.fillRect(this.offset+32, elipsis_y, 16, 16);
+    }
 	}).bind(state);
 	return state;
 };
@@ -211,20 +252,20 @@ function generateChunk(city, length, target, alleyBlock, alleyCount)
   var ab = false;
   var alleyWidth = 64;
   var buildingWidth = 128;
-  var buildingHeight = 64;
+  var buildingHeight = 256;
   if (length <= target)
   {
-  	if((Math.random() > 0.7) && (alleyBlock != true))
+  	if((Math.random() > 0.85) && (alleyBlock != true))
   	{
-  	  city.push({alley: true, w: alleyWidth, h: 0, x: length, y: 500});
+  	  city.push({alley: true, w: alleyWidth, h: 0, x: length, y: 700});
   	  length += alleyWidth;
   	  alleyCount += 1;
       ab = true;
   	}
   	else
   	{
-      var l = (buildingWidth * (Math.ceil(3 * Math.random())));
-  	  city.push({alley: false, w: l, h: (buildingHeight * Math.ceil(8 * Math.random())), x: length, y: 500});
+      var l = (buildingWidth * (Math.ceil((2 * Math.random())+1 )));
+  	  city.push({alley: false, w: l, h: (buildingHeight * Math.ceil((3 * Math.random()) + 1)), x: length, y: 700});
   	  length += l;
   	  ab = false;
   	}
