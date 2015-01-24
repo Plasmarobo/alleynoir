@@ -97,6 +97,7 @@ function initializeGame()
     }
     game.music = game.assets.audio[name];
     game.music.loop = true;
+    game.music.volume = 0.5;
     game.music.play();
   }).bind(game);
   game.playEffect = (function(name)

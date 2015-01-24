@@ -1,18 +1,10 @@
-var clearColor = "rgb(222, 13, 170)";
+var clearColor = "rgb(122, 13, 70)";
 var buildingColor = "rgb(5, 7, 55)";
 var streetColor = "rgb(51, 48, 69)";
 var lineColor = "rgb(82, 79, 49)";
 var effectColor = "rgb(249,0,0)";
 var spriteColor = "rgb(0, 0, 0)";
 var saveKey = "alleyNoirSave";
-
-function startDialog(background, dialog)
-{
-	var state = {
-
-	};
-	return state;
-};
 
 function newStaticObject(asset)
 {
@@ -152,12 +144,12 @@ function startNewGame()
 	game.playMusic("I Knew a Guy");
   state.overAlley = (function(){
     var index = 0;
-    var playerx = (game.width/2) - this.offset;
     var playerhitbox = 64/2; // Centered on playerx
     while(index < this.city.length)
     {
       var building = this.city[index];
-      if ((Math.abs(building.x - playerx) < playerhitbox) && (building.alley == true))
+      var distance = Math.abs(building.x + this.offset - this.noirSprite.x);
+      if ((distance < playerhitbox) && (building.alley == true))
       {
         return true;
       }
@@ -183,6 +175,7 @@ function startNewGame()
       if(this.idleTime > 3000)
       {
         alert("Start Dialog");
+        this.idleTime = 0;
       }
     }
     else
@@ -217,19 +210,19 @@ function startNewGame()
 		}
 		this.noirSprite.draw();
 
-    var elipsis_y = this.noirSprite.y-16-this.noirSprite.img.height;
+    var elipsis_y = this.noirSprite.y-32;
 		game.context.fillStyle = effectColor;
     if (this.idleTime > 200)
     {
-      game.context.fillRect(this.offset-32, elipsis_y, 16, 16);
+      game.context.fillRect(this.noirSprite.x-32, elipsis_y, 16, 16);
     }
     if (this.idleTime > 1000)
     {
-      game.context.fillRect(this.offset, elipsis_y, 16, 16);
+      game.context.fillRect(this.noirSprite.x, elipsis_y, 16, 16);
     }
     if (this.idleTime > 2000)
     {
-      game.context.fillRect(this.offset+32, elipsis_y, 16, 16);
+      game.context.fillRect(this.noirSprite.x+32, elipsis_y, 16, 16);
     }
 	}).bind(state);
 	return state;
@@ -237,40 +230,41 @@ function startNewGame()
 
 function generateCity()
 {
-  var minAlleyCount = 6;
+  var minAlleyCount = dialogQueue.length();
   var cityWidth = 25600;
   var alleyCount = 0;
   var city = [];
   while(alleyCount < 6)
   {
-  	alleyCount = generateChunk(city, 0, cityWidth, true, 0);
+  	alleyCount = generateChunk(city, 0, cityWidth, 0, 0);
   }
   return city;
 };
 
 function generateChunk(city, length, target, alleyBlock, alleyCount)
 {
-  var ab = false;
+  
   var alleyWidth = 64;
   var buildingWidth = 128;
   var buildingHeight = 256;
+  var alleyChance = alleyBlock/10;
   if (length <= target)
   {
-  	if((Math.random() > 0.85) && (alleyBlock != true))
+  	if((Math.random() < alleyChance) && (alleyBlock != true))
   	{
-  	  city.push({alley: true, w: alleyWidth, h: 0, x: length, y: 700});
+  	  city.push({alley: true, w: alleyWidth, h: 0, x: length, y: 700, dialog: chooseDialog()});
   	  length += alleyWidth;
   	  alleyCount += 1;
-      ab = true;
+      alleyBlock = 0;
   	}
   	else
   	{
       var l = (buildingWidth * (Math.ceil((2 * Math.random())+1 )));
   	  city.push({alley: false, w: l, h: (buildingHeight * Math.ceil((3 * Math.random()) + 1)), x: length, y: 700});
   	  length += l;
-  	  ab = false;
+  	  alleyBlock += 1;
   	}
-  	return generateChunk(city, length, target, ab, alleyCount);
+  	return generateChunk(city, length, target, alleyBlock, alleyCount);
   }
   else
   	return alleyCount;
