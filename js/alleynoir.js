@@ -230,7 +230,7 @@ function startNewGame()
 
 function generateCity()
 {
-  var minAlleyCount = dialogQueue.length();
+  var minAlleyCount = dialogQueue.length;
   var cityWidth = 25600;
   var alleyCount = 0;
   var city = [];
