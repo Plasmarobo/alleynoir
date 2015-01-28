@@ -1,3 +1,27 @@
+var arrestDialog = {
+  from: "Choice", message: "Arrest suspect?", pause: 0, wait: false, clear: true,
+  left: {
+    message: "ARREST", 
+    dialog: {"You arrest the suspect...", pause: 0, wait: true, clear: true, trigger: 1}
+  },
+  right: {
+    message: "Not yet...",
+    dialog: {"You let it go... for now."} pause: 0, wait: true, clear: true, trigger: 0}
+  }
+};
+
+var winDialog = {
+  from: "Choice", message: "Arrest suspect?", pause: 0, wait: false, clear: true,
+  left: {
+    message: "ARREST", 
+    dialog: {"You arrest the suspect...", pause: 0, wait: true, clear: true, trigger: 2}
+  },
+  right: {
+    message: "Not yet...",
+    dialog: {"You let it go... for now."} pause: 0, wait: true, clear: true, trigger: 0}
+  }
+};
+
 var dialogQueue = [
   {
     name: "The Crime Scene",
@@ -19,13 +43,17 @@ var dialogQueue = [
       {from: "Bouncer", message: "This ain't no place for the likes of you.", pause: 1000,  wait: false, clear: false},
       {from: "Bouncer", message: "I'd back off if it were me.", pause: 0, wait: true, clear: true},
       {from: "Choice", message: "Slip him a 20?", pause: 0, wait: true,
-        left: [
-          {from: "Narrator", message: "You slip him $20", pause: 250, wait: false, clear: false},
-          {from: "Bouncer", message: "I'm going to look over here for a sec...", pause: 0, wait: false, clear: false},
-          {from: "Bouncer", message: "If someone should slip past me, I'd never know.", pause: 0, wait: true, clear: true, trigger: 3}
-        ],
-        right: [{from: "Action", message: "You leave", trigger: 0}],
-        ],
+        left: {
+          message: "Yes",
+          dialog: [
+              {from: "Narrator", message: "You slip him $20", pause: 250, wait: false, clear: false},
+              {from: "Bouncer", message: "I'm going to look over here for a sec...", pause: 0, wait: false, clear: false},
+              {from: "Bouncer", message: "If someone should slip past me, I'd never know.", pause: 0, wait: true, clear: true, trigger: 3}
+          ],},
+        right: {
+          message: "No",
+          dialog: [{from: "Action", message: "You leave", trigger: 0}],
+        },
       },
     ],
   },
@@ -44,7 +72,7 @@ var dialogQueue = [
       {from: "Sam 'Smith'", message: "Lost the girl right after I lost the rest of it alright?", pause: 250, clear: false, wait: false},
       {from: "Sam 'Smith'", message: "I took it badly, don't usually lose. Lost something more important than some girl anyway...", pause: 500, clear: true, wait: true},
       {from: "Narrator", message: "The guy seems on the level after his encounter with encouragment.", pause: 250, clear: false, wait: false},
-      {from: "Narrator", message: "I decide it's better to let the loser stew for now.", pause: 250, wait: true, clear: false, trigger: 0}
+      arrestDialog,
     ]
   },
   {
@@ -56,7 +84,8 @@ var dialogQueue = [
       {from: "Diana", message: "So you're here about 'that'. Can't say I'm sad. She had it coming.", pause: 250, clear: true, wait: false},
       {from: "Diana", message: "I get pushed to the side, and she get's center stage!", pause: 250, clear: false, wait: false},
       {from: "Diana", message: "She even had the audacity to borrow my lipstick!", pause: 250, clear: false, wait: false},
-      {from: "Diana", message: "No, she had it coming detective. That's all I've got to say to you.", pause: 250, clear: false, wait: true, trigger: 0}
+      {from: "Diana", message: "No, she had it coming detective. That's all I've got to say to you.", pause: 250, clear: false, wait: true},
+      winDialog,
     ]
   },
   {
@@ -68,16 +97,18 @@ var dialogQueue = [
       {from: "Boss Elis", message: "I have some important guests, so forgive me, this will be breif.", pause: 500, clear: true, wait: true},
       {from: "Boss Elis", message: "The dame at my club, her and her date hit the tables.", pause: 500, clear: false, wait: false},
       {from: "Boss Elis", message: "Such a pity: seems he lost and became enraged.", pause: 500, clear: true, wait: true},
-      {from: "Boss Elis", message: "Seems the night was not so good for him or her after that.", pause: 500, clear: false, wait: true, trigger: 0}
+      {from: "Boss Elis", message: "Seems the night was not so good for him or her after that.", pause: 500, clear: false, wait: true},
+      arrestDialog,
     ]
   },
 ];
 
 var dialogManager = [
   {from: "Kidan", message: "I see we're admitting all kinds these days. I'll have to fix that.", pause: 500, clear: true, wait: true},
-  {from: "Kidan", message: "II think I know why you're here. In the interest of getting you out, I'll slip you a little something, eh?", pause: 500, clear: true, wait: true},
+  {from: "Kidan", message: "I think I know why you're here. In the interest of getting you out, I'll slip you a little something, eh?", pause: 500, clear: true, wait: true},
   {from: "Kidan", message: "She was singing that night. We had some VIPs in, so I put her on instead of Diana.", pause: 500, clear: true, wait: true},
-  {from: "Kidan", message: "She left with one of those VIPs. Check the hotel.", pause: 500, clear: true, wait: true, trigger: 0}
+  {from: "Kidan", message: "She left with one of those VIPs. Check the hotel.", pause: 500, clear: true, wait: true},
+  arrestDialog,
 ];
 
 
