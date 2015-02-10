@@ -4,7 +4,7 @@ var buildingColor = "rgb(5, 7, 55)";
 var streetColor = "rgb(51, 48, 69)";
 //var lineColor = "rgb(82, 79, 49)";
 var lineColor = clearColor;
-//var effectColor = "rgb(249,0,0)";
+var effectColor = "rgb(249,0,0)";
 var spriteColor = "rgb(0, 0, 0)";
 var saveKey = "alleyNoirSave";
 

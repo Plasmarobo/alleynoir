@@ -1,24 +1,66 @@
 var arrestDialog = {
-  from: "Choice", message: "Arrest suspect?", pause: 0, wait: false, clear: true, speed: 150,
-  left: {
-    message: "ARREST", 
-    dialog: {"You arrest the suspect...", pause: 0, wait: true, clear: true,speed: 150, trigger: 1}
-  },
-  right: {
-    message: "Not yet...",
-    dialog: {"You let it go... for now."} pause: 0, wait: true, clear: true,speed: 150, trigger: 0}
+  from: "Narrator", 
+  message: "Arrest suspect?", 
+  pause: 0, 
+  wait: false, 
+  clear: true, 
+  speed: 150,
+  choice: {
+    left: {
+      name: "ARREST", 
+      dialog: [{
+        message: "You arrest the suspect...", 
+        pause: 0, 
+        wait: true, 
+        clear: true,
+        speed: 150, 
+        trigger: 1
+      }]
+    },
+    right: {
+      name: "Not yet...",
+      dialog: [{
+        message: "You let it go... for now.", 
+        pause: 0, 
+        wait: true, 
+        clear: true,
+        speed: 150, 
+        trigger: 0
+      }]
+    }
   }
 };
 
 var winDialog = {
-  from: "Choice", message: "Arrest suspect?", pause: 0, wait: false,speed: 150, clear: true,
-  left: {
-    message: "ARREST", 
-    dialog: {"You arrest the suspect...", pause: 0, wait: true,speed: 150, clear: true, trigger: 2}
-  },
-  right: {
-    message: "Not yet...",
-    dialog: {"You let it go... for now."} pause: 0, wait: true,speed: 150, clear: true, trigger: 0}
+  from: "Narrator", 
+  message: "Arrest suspect?", 
+  pause: 0, 
+  wait: false,
+  speed: 150, 
+  clear: true,
+  choice: {
+    left: {
+      name: "ARREST", 
+      dialog: [{
+        message: "You arrest the suspect...", 
+        pause: 0, 
+        wait: true,
+        speed: 150, 
+        clear: true, 
+        trigger: 2
+      }]
+    },
+    right: {
+      name: "Not yet...",
+      dialog: [{
+        message: "You let it go... for now.", 
+        pause: 0, 
+        wait: true,
+        speed: 150, 
+        clear: true, 
+        trigger: 0
+      }]
+    }
   }
 };
 
@@ -42,17 +84,18 @@ var dialogQueue = [
       {from: "Bouncer", message: "Hello Kid.",speed: 150, pause: 0, wait: true, clear: false},
       {from: "Bouncer", message: "This ain't no place for the likes of you.",speed: 150, pause: 1000,  wait: false, clear: false},
       {from: "Bouncer", message: "I'd back off if it were me.",speed: 150, pause: 0, wait: true, clear: true},
-      {from: "Choice", message: "Slip him a 20?",speed: 150, pause: 0, wait: true,
-        left: {
-          message: "Yes",
-          dialog: [
-              {from: "Narrator", message: "You slip him $20",speed: 150, pause: 250, wait: false, clear: false},
-              {from: "Bouncer", message: "I'm going to look over here for a sec...",speed: 150, pause: 0, wait: false, clear: false},
-              {from: "Bouncer", message: "If someone should slip past me, I'd never know.",speed: 150, pause: 0, wait: true, clear: true, trigger: 3}
-          ],},
-        right: {
-          message: "No",
-          dialog: [{from: "Action", message: "You leave",pause: 0, clear: false, wait: false, speed: 150, trigger: 0}],
+      {from: "Choice", message: "Slip him a 20?",speed: 150, pause: 0, wait: true, choice: {
+          left: {
+            name: "Yes",
+            dialog: [
+                {from: "Narrator", message: "You slip him $20",speed: 150, pause: 250, wait: false, clear: false},
+                {from: "Bouncer", message: "I'm going to look over here for a sec...",speed: 150, pause: 0, wait: false, clear: false},
+                {from: "Bouncer", message: "If someone should slip past me, I'd never know.",speed: 150, pause: 0, wait: true, clear: true, trigger: 3}
+            ],},
+          right: {
+            name: "No",
+            dialog: [{from: "Action", message: "You leave",pause: 0, clear: false, wait: false, speed: 150, trigger: 0}],
+          },
         },
       },
     ],
