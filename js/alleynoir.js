@@ -8,23 +8,6 @@ var effectColor = "rgb(249,0,0)";
 var spriteColor = "rgb(0, 0, 0)";
 var saveKey = "alleyNoirSave";
 
-function newStaticObject(asset)
-{
-	var so = {};
-	so.img = game.assets.images[asset];
-	so.x = 0;
-	so.y = 0;
-	so.z = 0;
-	so.update = (function() {
-			// Do nothing
-		}).bind(so);
-	so.draw = (function()
-		{
-			game.context.drawImage(this.img, this.x, this.y);
-		}).bind(so);
-	return so;
-};
-
 function startMenu()
 {
 	var titleSprite = newStaticObject("title");

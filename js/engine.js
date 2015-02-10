@@ -1,29 +1,4 @@
 var game = {};
-var expectedWidth = 1280;
-var expectedHeight = 720;
-var pixelScale = 8; // 8 px to one unit at scale 1 
-var KEYSTATE_UP = 0;
-var KEYSTATE_DOWN = 1;
-var DEBOUNCE_DELAY = 100;
-var KeyCodes =
-{
-  BACKSPACE : 8,
-  TAB       : 9,
-  ENTER     : 13,
-  SHIFT     : 16,
-  CTRL      : 17,
-  ALT       : 18,
-  ESC       : 27,
-  SPACE     : 32,
-  LEFT      : 37,
-  UP        : 38,
-  RIGHT     : 39,
-  DOWN      : 40,
-  A         : 65,
-  D         : 68,
-  S         : 83,
-  W         : 87,
-};
 
 document.addEventListener("DOMContentLoaded", function(event) {
   initializeGame();
@@ -82,7 +57,7 @@ function initializeGame()
   game.clearColor = "rgb(0,0,0)";
   game.inputEvents = [];
   game.keyStates = Array(255); //ASCII keystates?
-  game.assets = {images: {}, audio: {}};
+  game.assets = {images: {}, audio: {}, animations: {}};
   game.allowSave = false;
   clear();
   game.stack = [];
@@ -206,6 +181,9 @@ function loadAsset(description)
       alert("Failed to load audio " + audioObj.src);
     };
     game.assets.audio[description.name] = audioObj;
+  }else if (description.type == "animation")
+  {
+    game.assets.animations[description.name] = description;
   }
   else {alert("Unknown content specified for load, aborting");}
 }
@@ -272,3 +250,69 @@ function projectCoordinates(obj)
 {
   return {x: obj.x * pixelScale * game.scale, y: obj.y * pixelScale * game.scale};
 }
+
+function advanceAnimation(delta)
+{
+  this.frameTime += game.delta;
+  if (this.frameTime > this.anim[this.animIndex].time)
+  {
+    var trigger = this.anim[this.animIndex].frames[this.frameIndex].trigger;
+    
+    if (trigger != null)
+    {
+      trigger();
+    }
+
+    if (this.frameIndex < this.anim[this.animIndex].frames.length)
+    {
+      this.frameTime = 0;
+      this.frameIndex++;
+    }
+
+    if ((this.frameIndex >= this.anim[this.animIndex].length) && 
+        (this.anim[this.animIndex].loop == true))
+    {
+      this.frameIndex = 0;
+    } 
+  }
+}
+
+function newAnimation(asset, animtation, update)
+{
+  var ao = {};
+  ao.img = game.assets.images[asset];
+  ao.x = 0;
+  ao.y = 0;
+  ao.z = 0;
+  ao.anim = game.assets.animations[animation];
+
+  ao.frameTime = 0;
+  ao.frameIndex = 0;
+  ao.animIndex = 0;
+  ao.advanceAnimation = (advanceAnimation).bind(ao);
+  ao.update = (function() {
+    this.advanceAnimation();    
+  }).bind(ao);
+
+  so.draw = (function() {
+      game.context.drawImage(this.img, this.x, this.y);
+  }).bind(so);
+  return so;
+}
+
+function newStaticObject(asset)
+{
+  var so = {};
+  so.img = game.assets.images[asset];
+  so.x = 0;
+  so.y = 0;
+  so.z = 0;
+  so.update = (function() {
+      // Do nothing
+    }).bind(so);
+  so.draw = (function()
+    {
+      game.context.drawImage(this.img, this.x, this.y);
+    }).bind(so);
+  return so;
+};
