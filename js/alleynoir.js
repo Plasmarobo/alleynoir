@@ -42,8 +42,8 @@ function startMenu()
 		  	{
 		  		switch(e.keyCode)
 		  		{
-		  			case KeyCodes.LEFT:
-		  			case KeyCodes.A:
+		  			case KeyCodes.UP:
+		  			case KeyCodes.W:
 		  			    if((this.selected == 1) && (this.savedGame != null))
 		  			    {
 		  			    	this.selected = 0;
@@ -54,8 +54,20 @@ function startMenu()
 		  			    }
 		  			  break;
 
-		  			case KeyCodes.RIGHT:
-		  			case KeyCodes.W:
+		  		    case KeyCodes.DOWN:
+		  		    case KeyCodes.S:
+		  		    	if((this.selected == 1) && (this.savedGame != null))
+		  		    	{
+		  		    		this.selected = 0;
+		  		    	}
+		  		    	else
+		  		    	{
+		  		    		this.selected = 1;
+		  		    	}
+		  		      break;
+
+		  			case KeyCodes.ENTER:
+		  			case KeyCodes.SPACE:
 		  				if ((this.selected == 0) && (this.savedGame != null))
 		  				{
 		  					pushState(this.savedGame);
@@ -121,9 +133,26 @@ function startNewGame()
 	state.alleys = [];
 
 	state.offset = 0;
-	state.noirSprite = newStaticObject("noir");
+	state.noirSprite = newAnimation("noir", "noir", function()
+		{
+			// Player controls
+			if (game.keyStates[KeyCodes.LEFT] == KEYSTATE_DOWN)
+			{
+				this.animIndex = "noir_left";
+			}
+			else if (game.keyStates[KeyCodes.RIGHT] == KEYSTATE_DOWN)
+			{
+				this.animIndex = "noir_right";
+			}
+			else if (game.keyStates[KeyCodes.DOWN] == KEYSTATE_DOWN)
+			{
+				this.animIndex = "noir_down";
+			}
+			else this.animIndex = "noir_idle";
+		});
 	state.noirSprite.x = game.width/2-state.noirSprite.img.width;
 	state.noirSprite.y = 730-state.noirSprite.img.height;
+	state.noirSprite.animIndex = "noir_idle";
   state.idleTime = 0;
 	state.city = generateCity();
 	game.playMusic("I Knew a Guy");

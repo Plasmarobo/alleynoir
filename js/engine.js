@@ -184,6 +184,7 @@ function loadAsset(description)
   }else if (description.type == "animation")
   {
     game.assets.animations[description.name] = description;
+    onload();
   }
   else {alert("Unknown content specified for load, aborting");}
 }
@@ -277,7 +278,7 @@ function advanceAnimation(delta)
   }
 }
 
-function newAnimation(asset, animtation, update)
+function newAnimation(asset, animation, update_function)
 {
   var ao = {};
   ao.img = game.assets.images[asset];
@@ -290,7 +291,9 @@ function newAnimation(asset, animtation, update)
   ao.frameIndex = 0;
   ao.animIndex = 0;
   ao.advanceAnimation = (advanceAnimation).bind(ao);
+  ao.update_binding = (update_function).bind(ao);
   ao.update = (function() {
+    this.update_binding();
     this.advanceAnimation();    
   }).bind(ao);
 
