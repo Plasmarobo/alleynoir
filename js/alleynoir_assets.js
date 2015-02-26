@@ -75,7 +75,7 @@ var assetQueue = [];
         time: 0,
         trigger: null,
       }
-    ]
+    ],
     loop: false,
   },
   {
