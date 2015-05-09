@@ -143,23 +143,26 @@ function startNewGame()
 			// Player controls
 			if (game.keyStates[KeyCodes.LEFT] == KEYSTATE_DOWN)
 			{
-				this.animIndex = "noir_left";
+				this.setAnimation("noir_left");
 			}
 			else if (game.keyStates[KeyCodes.RIGHT] == KEYSTATE_DOWN)
 			{
-				this.animIndex = "noir_right";
+				this.setAnimation("noir_right");
 			}
 			else if (game.keyStates[KeyCodes.DOWN] == KEYSTATE_DOWN)
 			{
-				this.animIndex = "noir_down";
+				this.setAnimation("noir_down");
 			}
-			else this.animIndex = "noir_idle";
+			else
+      {
+        this.setAnimation("noir_idle");
+      }
 		});
-	state.noirSprite.x = game.width/2-state.noirSprite.img.width;
-	state.noirSprite.y = 730-state.noirSprite.img.height;
-	state.noirSprite.animIndex = "noir_idle";
+	state.noirSprite.x = game.width/2-(state.noirSprite.img.width/8);
+	state.noirSprite.y = 730-(state.noirSprite.img.height/2);
+	state.noirSprite.setAnimation("noir_idle");
   state.idleTime = 0;
-	state.city = generateCity();
+  state.city = generateCity();
 	game.playMusic("I Knew a Guy");
   state.overAlley = (function(){
     var index = 0;
@@ -179,6 +182,7 @@ function startNewGame()
 	state.update = (function()
 	{
 		var motion = 0;
+    this.noirSprite.update();
 		if (game.keyStates[KeyCodes.RIGHT] == KEYSTATE_DOWN)
 		{
 			motion = -1;
@@ -218,7 +222,7 @@ function startNewGame()
       // ensure building is on screne and not an alley
 			if ((building.alley == false) &&
           (rightcoord > 0)          &&
-          (leftcoord < game.context.width))
+          (leftcoord < game.width))
 			{
 				game.context.fillStyle = buildingColor;
 				game.context.fillRect(leftcoord, building.y-building.h, building.w, building.h);

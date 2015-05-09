@@ -262,26 +262,30 @@ function projectCoordinates(obj)
 function advanceAnimation(delta)
 {
   this.frameTime += game.delta;
-  if (this.frameTime > this.anim[this.animIndex].time)
+  var currentFrame = this.currentFrame();
+  if (this.frameTime > currentFrame.time)
   {
-    var trigger = this.anim[this.animIndex].frames[this.frameIndex].trigger;
-    
-    if (trigger != null)
+    if (currentFrame.trigger != null)
     {
-      trigger();
+      currentFrame.trigger();
     }
 
-    if (this.frameIndex < this.anim[this.animIndex].frames.length)
+    if (this.frameIndex < this.currentAnimation().frames.length)
     {
       this.frameTime = 0;
-      this.frameIndex++;
+      if (this.frameIndex < this.currentAnimation().frames.length-1)
+      {
+        this.frameIndex++;
+      }
+      else
+      {
+        if (this.currentAnimation().loop == true)
+        {
+          this.frameIndex = 0;
+        }
+      }
     }
-
-    if ((this.frameIndex >= this.anim[this.animIndex].length) && 
-        (this.anim[this.animIndex].loop == true))
-    {
-      this.frameIndex = 0;
-    } 
+    
   }
 }
 
@@ -305,8 +309,23 @@ function newAnimation(asset, animation, initial_anim, update_function)
   }).bind(ao);
 
   ao.draw = (function() {
-      var frame = this.anim[this.animIndex].frames[this.frameIndex];
+      var frame = this.currentFrame();
       game.context.drawImage(this.img, frame.x, frame.y, frame.w, frame.h,this.x, this.y, frame.w, frame.h);
+  }).bind(ao);
+
+  ao.currentFrame = (function(){
+    return this.anim[this.animIndex].frames[this.frameIndex];
+  }).bind(ao);
+  ao.currentAnimation = (function(){
+    return this.anim[this.animIndex];
+  }).bind(ao);
+  ao.setAnimation = (function(key){
+    if (this.animIndex != key)
+    {
+      this.animIndex = key;
+      this.frameIndex = 0;
+      this.frameTime = 0;
+    }
   }).bind(ao);
   return ao;
 }

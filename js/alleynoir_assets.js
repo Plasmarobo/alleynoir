@@ -32,7 +32,7 @@ var assetQueue = [];
       			y: 0,
       			w: 64,
       			h: 154,
-      			time: 500,
+      			time: 750,
       			trigger: null,
       		},
       		{
@@ -40,7 +40,7 @@ var assetQueue = [];
       			y: 0,
       			w: 64,
       			h: 154,
-      			time: 500,
+      			time: 750,
       			trigger: null,
         	}
       	],
@@ -54,7 +54,7 @@ var assetQueue = [];
             y: 0,
             w: 64,
             h: 154,
-            time: 500,
+            time: 750,
             trigger: null,
           },
           {
@@ -62,7 +62,7 @@ var assetQueue = [];
             y: 0,
             w: 64,
             h: 154,
-            time: 500,
+            time: 750,
             trigger: null,
           }
         ],
@@ -72,7 +72,7 @@ var assetQueue = [];
         name: "noir_idle", 
         frames: [
           {
-            x: 128,
+            x: 0,
             y: 0,
             w: 64,
             h: 154,
