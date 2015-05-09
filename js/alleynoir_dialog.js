@@ -1,3 +1,12 @@
+var dialogBox = {
+  padding: 32,
+  color: "rgb(128,128,200)",
+  borderColor: "rgb(100,100,100)"
+  // TODO base these on window
+  height: 320,
+  width: 800,
+};
+
 var arrestDialog = {
   from: "Narrator", 
   message: "Arrest suspect?", 
@@ -170,6 +179,32 @@ function chooseDialog()
 
 function startDialog(dialog)
 {
+  var noirClose = newStaticObject("noir_close");
+  noirClose.x = 0;
+  noirClose.y = noirClose.img.height;
+  var flare = {
+    x : 254,
+    y : 248,
+    w : 16,
+    h : 16,
+    color : "rgb(0,0,0)",
+    time : (new Date).getTime(),
+  };
+  flare.updateColor = (function(){
+    var now = (new Date).getTime() - this.time;
+    if (now < 8000)
+    {
+    var rads = (now/4000) * Math.PI;
+    var r = 200 + 55 * Math.sin(rads);
+    this.color = "rgb("+r+",0,0)";
+    }
+    if(now > 12000)
+    {
+        this.time = (new Date).getTime();
+    }
+  }).bind(flare);
+
+
   var state = {
     dialog: dialog,
     cursor: 0,
@@ -177,10 +212,15 @@ function startDialog(dialog)
     background: background,
     accumulator: 0,
     from: null,
+    noirClose : noirClose,
+    flare : flare
   };
+
   state.udpate = (function(){
+    flare.updateColor();
+
     //Print message up to subcursor
-    this.from = dialog[cursor].from;
+    
     if (this.from == null)
     {
       this.from = "SYSTEM ERROR";
@@ -192,31 +232,32 @@ function startDialog(dialog)
     else
     {
       this.accumulator += game.delta;
-      if (accumulator > dialog[cursor].speed)
+      if (this.accumulator > this.dialog[cursor].speed)
       {
-        accumuator -= dialog[cursor].speed;
-        subcursor += 1;
+        this.accumuator -= this.dialog[cursor].speed;
+        this.subcursor += 1;
       }
-      if (subcursor < dialog[cursor].message.length)
+      if (this.subcursor < this.dialog[cursor].message.length)
       {
 
       }
       else
       {
-        if (dialog[cursor].clear)
+        if (this.dialog[cursor].clear == true)
         {
 
         }
-        if (dialog[cursor].wait)
+        if (this.dialog[cursor].wait == true)
         {
 
         }
-        if (dialog[cursor].pause)
+        if (this.dialog[cursor].pause == true)
         {
 
         }
-        cursor += 1;
-
+        this.cursor += 1;
+        this.from = this.dialog[cursor].from;
+        this.subcursor = 0;
       }
     }
   }).bind(state);
@@ -245,6 +286,19 @@ function startDialog(dialog)
       default:
         break;
     }
+  }).bind(state);
+  state.draw = (function(){
+    noirClose.draw();
+    game.context.fillStyle = flare.color;
+    game.context.fillRect(flare.x, flare.y, flare.w, flare.h);
+    //Dialog box
+    game.context.fillStyle = dialogBox.borderColor;
+    game.context.fillRect(dialogBox.padding, game.height-dialogBox.height-dialogBox.padding, dialogBox.width+dialogBox.padding, dialogBox.height+dialogBox.padding);
+    game.context.fillStyle = dialogBox.color;
+    game.context.fillRect(dialogBox.padding*2, game.height-dialogBox.height, dialogBox.width, dialogBox.height);
+    // Get substring to print
+
+
   }).bind(state);
   return state;
 };

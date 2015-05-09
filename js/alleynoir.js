@@ -197,7 +197,7 @@ function startNewGame()
       this.idleTime += game.delta; 
       if(this.idleTime > 3000)
       {
-        alert("Start Dialog");
+        startDialog(chooseDialog);
         this.idleTime = 0;
       }
     }
