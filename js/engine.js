@@ -6,7 +6,12 @@ document.addEventListener("DOMContentLoaded", function(event) {
   // http://nokarma.org/2011/02/02/javascript-game-development-the-game-loop/
   (function() {
   var onEachFrame;
-  if (window.mozRequestAnimationFrame) {
+  if (window.requestAnimationFrame) {
+    onEachFrame = function(cb) {
+      var _cb = function () { cb(); requestAnimationFrame(_cb); }
+      _cb();
+    }
+  }else if (window.mozRequestAnimationFrame) {
     onEachFrame = function(cb) {
       var _cb = function () { cb(); requestAnimationFrame(_cb); }
       _cb();
@@ -82,23 +87,25 @@ function initializeGame()
     // game.sfx.push(sfx);
     sfx.play();
   }).bind(game);
-  game.lastframe = (new Date).getTime();
   game.delta = 0;
+  game.lastframe = (new Date).getTime();
   game.update = (function() {
     var loops = 0, skipTicks = 1000 / game.fps,
-      maxFrameSkip = 10,
-      nextGameTick = (new Date).getTime();
+      maxFrameSkip = 120,
+      currentTime = (new Date).getTime(),
+      nextGameTick = currentTime;
   
     return function() {
       loops = 0;
+
       if (game.stack.length > 0)
       {
-        while ((new Date).getTime() > nextGameTick && loops < maxFrameSkip) {
-          game.delta = (new Date).getTime() - game.lastframe;
+        while (((currentTime = (new Date).getTime()) > nextGameTick) && (loops < maxFrameSkip)) {
+          game.delta = currentTime - game.lastframe;
           game.stack[game.stack.length-1].update();
           nextGameTick += skipTicks;
           loops++;
-          game.lastframe = (new Date).getTime();
+          game.lastframe = currentTime;
           // purge input queue
         }
     
@@ -183,7 +190,7 @@ function loadAsset(description)
     game.assets.audio[description.name] = audioObj;
   }else if (description.type == "animation")
   {
-    game.assets.animations[description.name] = description;
+    game.assets.animations[description.name] = description.anim;
     onload();
   }
   else {alert("Unknown content specified for load, aborting");}
@@ -278,7 +285,7 @@ function advanceAnimation(delta)
   }
 }
 
-function newAnimation(asset, animation, update_function)
+function newAnimation(asset, animation, initial_anim, update_function)
 {
   var ao = {};
   ao.img = game.assets.images[asset];
@@ -289,7 +296,7 @@ function newAnimation(asset, animation, update_function)
 
   ao.frameTime = 0;
   ao.frameIndex = 0;
-  ao.animIndex = 0;
+  ao.animIndex = initial_anim;
   ao.advanceAnimation = (advanceAnimation).bind(ao);
   ao.update_binding = (update_function).bind(ao);
   ao.update = (function() {
@@ -297,10 +304,11 @@ function newAnimation(asset, animation, update_function)
     this.advanceAnimation();    
   }).bind(ao);
 
-  so.draw = (function() {
-      game.context.drawImage(this.img, this.x, this.y);
-  }).bind(so);
-  return so;
+  ao.draw = (function() {
+      var frame = this.anim[this.animIndex].frames[this.frameIndex];
+      game.context.drawImage(this.img, frame.x, frame.y, frame.w, frame.h,this.x, this.y, frame.w, frame.h);
+  }).bind(ao);
+  return ao;
 }
 
 function newStaticObject(asset)

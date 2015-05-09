@@ -70,7 +70,7 @@ function startMenu()
 		  			case KeyCodes.SPACE:
 		  				if ((this.selected == 0) && (this.savedGame != null))
 		  				{
-		  					pushState(this.savedGame);
+		  					pushState(startSavedGame(this.savedGame));
 		  				}
 		  				else
 		  				{
@@ -102,7 +102,7 @@ function startMenu()
 			this.cursorSprite.draw();
 		}).bind(state);
 		
-	if(typeof(Storage) !== "undefined") {
+	/*if(typeof(Storage) !== "undefined") {
     	var savedGame = localStorage.getItem(saveKey);
     	if (savedGame == null)
     	{
@@ -120,7 +120,12 @@ function startMenu()
     	}
 	} else {
     	alert("Save games not supported by your browser");
-	}
+      state.savedGame = null;
+	}*/
+  // don't support saves yet
+  state.savedGame = null;
+  state.selected = 1;
+
 	
 	return state;
 };
@@ -133,7 +138,7 @@ function startNewGame()
 	state.alleys = [];
 
 	state.offset = 0;
-	state.noirSprite = newAnimation("noir", "noir", function()
+	state.noirSprite = newAnimation("noir", "noir", "noir_idle", function()
 		{
 			// Player controls
 			if (game.keyStates[KeyCodes.LEFT] == KEYSTATE_DOWN)
@@ -208,10 +213,15 @@ function startNewGame()
 		for(var i = 0; i < this.city.length; ++i)
 		{
 			var building = this.city[i];
-			if (building.alley == false)
+      var leftcoord = building.x + this.offset;
+      var rightcoord = building.x + building.w + this.offset;
+      // ensure building is on screne and not an alley
+			if ((building.alley == false) &&
+          (rightcoord > 0)          &&
+          (leftcoord < game.context.width))
 			{
 				game.context.fillStyle = buildingColor;
-				game.context.fillRect(building.x + this.offset, building.y-building.h, building.w, building.h);
+				game.context.fillRect(leftcoord, building.y-building.h, building.w, building.h);
 			}
 		}
 
@@ -240,6 +250,11 @@ function startNewGame()
     }
 	}).bind(state);
 	return state;
+};
+
+function startSavedGame()
+{
+  //TODO
 };
 
 function generateCity()

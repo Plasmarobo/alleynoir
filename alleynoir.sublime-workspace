@@ -1,0 +1,466 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"play",
+				"playerhitbox"
+			],
+			[
+				"asset",
+				"assetCount"
+			],
+			[
+				"hash",
+				"hash_to_xy"
+			],
+			[
+				"pro",
+				"proficiency_select"
+			],
+			[
+				"vault",
+				"vault_hunters"
+			],
+			[
+				"tec",
+				"technomancy"
+			],
+			[
+				"prereq",
+				"prereq_name"
+			],
+			[
+				"Tec",
+				"technomancy"
+			],
+			[
+				"update",
+				"update_set"
+			],
+			[
+				"attirbute_",
+				"attribute_instance_params"
+			],
+			[
+				"prof",
+				"proficiencies"
+			],
+			[
+				"proficienc",
+				"proficiency_templates"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "js/engine.js",
+			"settings":
+			{
+				"buffer_size": 8073,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "alleynoir.html",
+			"settings":
+			{
+				"buffer_size": 406,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/alleynoir.js",
+			"settings":
+			{
+				"buffer_size": 7314,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/alleynoir_assets.js",
+			"settings":
+			{
+				"buffer_size": 1783,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/austen/alleynoir",
+		"/home/austen/alleynoir/js"
+	],
+	"file_history":
+	[
+		"/home/austen/alleynoir/alleynoir.html",
+		"/home/austen/poolspread",
+		"/home/austen/simpleoutput/test/test_plot_plugin.rb",
+		"/home/austen/simpleoutput/test/test_log.rb",
+		"/home/austen/simpleoutput/test/test_histogram.rb",
+		"/home/austen/simpleoutput/test/test_csv.rb",
+		"/home/austen/simpleoutput/lib/simplecsv.rb",
+		"/home/austen/simpleoutput/lib/simplelog.rb",
+		"/home/austen/simpleoutput/README.md",
+		"/home/austen/simpleoutput/simpleoutput.gemspec",
+		"/home/austen/simpleoutput/test/test_chartkick_plugin.rb",
+		"/home/austen/simpleoutput/lib/simplechartkick.rb",
+		"/home/austen/simpleoutput/lib/simpleplot.rb",
+		"/home/austen/simpleoutput/test/test_all.rb",
+		"/home/austen/BLRPG/app/controllers/races_controller.rb",
+		"/home/austen/BLRPG/app/views/hunters/list.html.haml",
+		"/home/austen/BLRPG/app/views/races/list.html.haml",
+		"/home/austen/BLRPG/app/views/proficiency_templates/list.html.haml",
+		"/home/austen/BLRPG/app/controllers/application_controller.rb",
+		"/home/austen/BLRPG/app/controllers/home_controller.rb",
+		"/home/austen/BLRPG/app/views/home/pals.html.haml",
+		"/home/austen/BLRPG/config/environments/production.rb",
+		"/home/austen/BLRPG/config/initializers/devise.rb",
+		"/home/austen/BLRPG/config/locales/devise.en.yml",
+		"/home/austen/BLRPG/Gemfile",
+		"/home/austen/BLRPG/db/schema.rb",
+		"/home/austen/BLRPG/app/views/hunters/sheet.html.haml",
+		"/home/austen/BLRPG/app/views/skill_templates/list.html.haml",
+		"/home/austen/BLRPG/config/routes.rb",
+		"/home/austen/BLRPG/app/controllers/hunters_controller.rb",
+		"/home/austen/BLRPG/app/views/hunters/share.html.haml",
+		"/home/austen/BLRPG/app/assets/stylesheets/hunters.css.scss",
+		"/home/austen/BLRPG/app/controllers/attacks_controller.rb",
+		"/home/austen/BLRPG/app/views/attacks/share.html.haml",
+		"/home/austen/BLRPG/app/helpers/hunters_helper.rb",
+		"/home/austen/BLRPG/app/views/home/dashboard.html.haml",
+		"/home/austen/BLRPG/app/views/home/about.html.haml",
+		"/home/austen/BLRPG/app/controllers/skill_templates_controller.rb",
+		"/home/austen/BLRPG/app/controllers/skills_controller.rb",
+		"/home/austen/BLRPG/app/views/attacks/new.html.haml",
+		"/home/austen/BLRPG/app/assets/stylesheets/application.css.scss",
+		"/home/austen/BLRPG/app/views/layouts/application.html.haml",
+		"/home/austen/BLRPG/app/models/proficiency_template.rb",
+		"/home/austen/BLRPG/app/models/skill.rb",
+		"/home/austen/BLRPG/app/models/skill_template.rb",
+		"/home/austen/BLRPG/app/models/attribute_template.rb",
+		"/home/austen/BLRPG/app/models/attribute_instance.rb",
+		"/home/austen/BLRPG/app/assets/stylesheets/player.css.scss",
+		"/home/austen/BLRPG/db/seeds.rb",
+		"/home/austen/BLRPG/app/assets/javascripts/application.js",
+		"/home/austen/BLRPG/app/controllers/attribute_instances_controller.rb",
+		"/home/austen/BLRPG/app/assets/javascripts/hunters.js.coffee",
+		"/home/austen/BLRPG/app/controllers/proficiencies_controller.rb",
+		"/home/austen/BLRPG/app/views/hunters/new.html.haml",
+		"/home/austen/BLRPG/app/controllers/proficiency_templates_controller.rb",
+		"/home/austen/BLRPG/app/views/attacks/update.html.haml",
+		"/home/austen/BLRPG/app/models/vault_hunter.rb",
+		"/home/austen/BLRPG/app/assets/javascripts/skill_templates.js.coffee",
+		"/home/austen/BLRPG/app/views/skill_templates/list.js.haml",
+		"/home/austen/BLRPG/app/views/proficiency_templates/list.js.haml",
+		"/home/austen/BLRPG/app/views/hunters/list.js.haml",
+		"/home/austen/BLRPG/app/views/attacks/show.json.jbuilder",
+		"/home/austen/BLRPG/app/views/attacks/index.json.jbuilder",
+		"/home/austen/BLRPG/app/assets/javascripts/player.js.coffee",
+		"/home/austen/BLRPG/app/views/devise/sessions/new.html.erb",
+		"/home/austen/BLRPG/app/assets/javascripts/utils.js.coffee",
+		"/home/austen/BLRPG/app/views/proficiencies/index.json.jbuilder",
+		"/home/austen/BLRPG/app/views/proficiencies/show.json.jbuilder",
+		"/home/austen/BLRPG/app/views/hunters/edit.html.haml",
+		"/home/austen/BLRPG/app/views/hunters/index.json.jbuilder",
+		"/home/austen/BLRPG/app/views/skill_templates/index.json.jbuilder",
+		"/home/austen/BLRPG/app/views/skill_templates/show.json.jbuilder",
+		"/home/austen/BLRPG/app/views/proficiency_templates/index.json.jbuilder",
+		"/home/austen/BLRPG/app/views/proficiency_templates/show.json.jbuilder",
+		"/home/austen/BLRPG/app/controllers/templates_controller.rb",
+		"/home/austen/BLRPG/app/views/player/characters.html.haml",
+		"/home/austen/BLRPG/app/views/player/sheet.html.haml",
+		"/home/austen/VaultHunter.js",
+		"/home/austen/VaultHunter.css",
+		"/home/austen/VaultHunter.haml",
+		"/home/austen/f.ragment-TCG/prototype/moves.h",
+		"/home/austen/f.ragment-TCG/public/cards/action/unplus.json",
+		"/home/austen/f.ragment-TCG/public/cards/action/coffeespill.json",
+		"/home/austen/f.ragment-TCG/public/cards/action/run.json",
+		"/home/austen/f.ragment-TCG/public/cards/action/shift.json",
+		"/home/austen/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/austen/.config/sublime-text-3/Packages/User/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"seeds.rb",
+			"sheet.html.haml",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Prerequsites",
+			"Prerequisites",
+			"Prerequisite",
+			"@vh",
+			"confirmation",
+			"attributes",
+			"unsigned int"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"Prerequsite",
+			"Prerequsites",
+			"Prerequisites",
+			"@vault_hunter",
+			"flag_t"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"folders":
+	[
+		{
+			"follow_symlinks": true,
+			"path": "/home/austen/alleynoir"
+		}
+	],
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "js/engine.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8073,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2545,
+								2545
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1173.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "alleynoir.html",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 406,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								406,
+								406
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "js/alleynoir.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 7314,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3445,
+								3445
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1938.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "js/alleynoir_assets.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1783,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1391,
+								1391
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1041.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 33.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"project": "",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 190.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

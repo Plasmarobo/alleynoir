@@ -20,81 +20,86 @@ var assetQueue = [];
 });
 
 //Animations
-([{
-  	name: "noir_right", 
-  	frames: [
-  		{
-  			x: 0,
-  			y: 0,
-  			w: 64,
-  			h: 154,
-  			time: 500,
-  			trigger: null,
-  		},
-  		{
-  			x: 64,
-  			y: 0,
-  			w: 64,
-  			h: 154,
-  			time: 500,
-  			trigger: null,
-    	}
-  	],
-    loop: true,
-  },
+([
   {
-    name: "noir_left", 
-    frames: [
-      {
-        x: 0,
-        y: 0,
-        w: 64,
-        h: 154,
-        time: 500,
-        trigger: null,
+    name: "noir",
+    anim: {
+      "noir_right" : {
+      	name: "noir_right", 
+      	frames: [
+      		{
+      			x: 0,
+      			y: 0,
+      			w: 64,
+      			h: 154,
+      			time: 500,
+      			trigger: null,
+      		},
+      		{
+      			x: 64,
+      			y: 0,
+      			w: 64,
+      			h: 154,
+      			time: 500,
+      			trigger: null,
+        	}
+      	],
+        loop: true,
       },
-      {
-        x: 128,
-        y: 0,
-        w: 64,
-        h: 154,
-        time: 500,
-        trigger: null,
+      "noir_left": {
+        name: "noir_left", 
+        frames: [
+          {
+            x: 0,
+            y: 0,
+            w: 64,
+            h: 154,
+            time: 500,
+            trigger: null,
+          },
+          {
+            x: 128,
+            y: 0,
+            w: 64,
+            h: 154,
+            time: 500,
+            trigger: null,
+          }
+        ],
+        loop: true,
+      },
+      "noir_idle": {
+        name: "noir_idle", 
+        frames: [
+          {
+            x: 128,
+            y: 0,
+            w: 64,
+            h: 154,
+            time: 0,
+            trigger: null,
+          }
+        ],
+        loop: false,
+      },
+      "noir_shoot" : {
+        name: "noir_shoot", 
+        frames: [
+          {
+            x: 192,
+            y: 0,
+            w: 64,
+            h: 154,
+            time: 0,
+            trigger: null 
+          }
+        ],
+        loop: false,
       }
-    ],
-    loop: true,
+    },
   },
-  {
-    name: "noir_idle", 
-    frames: [
-      {
-        x: 128,
-        y: 0,
-        w: 64,
-        h: 154,
-        time: 0,
-        trigger: null,
-      }
-    ],
-    loop: false,
-  },
-  {
-    name: "noir_shoot", 
-    frames: [
-      {
-        x: 192,
-        y: 0,
-        w: 64,
-        h: 154,
-        time: 0,
-        trigger: null 
-      }
-    ],
-    loop: false,
-
-  },
-]).forEach(function(anim){
-	anim.type = "animation";
-	assetQueue.push(anim)
+]).forEach(function(animSet){
+	animSet.type = "animation";
+	assetQueue.push(animSet)
 
 });
