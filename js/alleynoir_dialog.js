@@ -1,7 +1,7 @@
 var dialogBox = {
   padding: 32,
   color: "rgb(128,128,200)",
-  borderColor: "rgb(100,100,100)"
+  borderColor: "rgb(100,100,100)",
   // TODO base these on window
   height: 320,
   width: 800,
@@ -209,7 +209,7 @@ function startDialog(dialog)
     dialog: dialog,
     cursor: 0,
     subcursor: 0,
-    background: background,
+    background: newStaticObject(dialog.background),
     accumulator: 0,
     from: null,
     noirClose : noirClose,

@@ -6,7 +6,8 @@ var assetQueue = [];
   "new_game",
   "continue_game",
   "cursor",
-  "noir"
+  "noir",
+  "noir_close"
 ]).forEach(function(name){
 	assetQueue.push({type: "image", name: name});
 });
